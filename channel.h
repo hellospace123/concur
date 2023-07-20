@@ -22,13 +22,12 @@ enum channel_status {
 };
 
 // Defines channel object
-typedef struct {
-    // DO NOT REMOVE buffer (OR CHANGE ITS NAME) FROM THE STRUCT
-    // YOU MUST USE buffer TO STORE YOUR BUFFERED CHANNEL MESSAGES
-    buffer_t* buffer;
 
-    /* ADD ANY STRUCT ENTRIES YOU NEED HERE */
-    /* IMPLEMENT THIS */
+typedef struct {
+    buffer_t* buffer;
+    pthread_mutex_t mutex; // Mutex to protect the buffer
+    pthread_cond_t not_empty; // Condition variable to signal that the buffer is not empty
+    pthread_cond_t not_full; // Condition variable to signal that the buffer is not full
 } channel_t;
 
 // Defines channel list structure for channel_select function

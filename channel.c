@@ -4,8 +4,27 @@
 // A 0 size indicates an unbuffered channel, whereas a positive size indicates a buffered channel
 channel_t* channel_create(size_t size)
 {
-    /* IMPLEMENT THIS */
-    return NULL;
+    // Allocate memory for the new channel_t object
+    channel_t* channel = malloc(sizeof(channel_t));
+    if (channel == NULL) {
+        // malloc failed
+        return NULL;
+    }
+
+    // Initialize the channel properties
+    channel->buffer = buffer_create(size);
+    if (channel->buffer == NULL) {
+        // buffer_create failed
+        free(channel);
+        return NULL;
+    }
+
+    // Initialize the synchronization primitives
+    pthread_mutex_init(&channel->mutex, NULL);
+    pthread_cond_init(&channel->not_empty, NULL);
+    pthread_cond_init(&channel->not_full, NULL);
+
+    return channel;
 }
 
 // Writes data to the given channel
